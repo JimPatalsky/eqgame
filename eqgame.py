@@ -36,7 +36,7 @@ class EqGame:
         if len(cmd) != 1:
             return 'z'
         else:
-            cmd = cmd.lower();
+            cmd = cmd.lower()
             if cmd in self.valid_cmds:
                 return cmd
             else:
@@ -54,7 +54,12 @@ class EqGame:
             print 'Your journal is blank!'
         elif self.cmd == 'c':
             # Current tile actions
-            print 'Your on a boring tile and have nothing to do!'
+            # Check if hero is in a city
+            if self.world.is_city(self.hero.loc):
+                print 'You are in', self.world.get_city_name(self.hero.loc)
+                self.world.city_action(self.hero.loc)
+            else:
+                print 'Your on a boring tile and have nothing to do!'
         elif self.cmd == 'm':
             # Print main
             self.print_main();
@@ -111,20 +116,18 @@ class EqGame:
         else:
             # Soemthing went wrong
             print 'You are fighting yourself!?...?!'
-
         while ((not self.hero.is_dead()) and (not enemy.is_dead())):
             # While both are alive we fight
             # Lets give the hero the first hit
             enemy.defend(self.hero.attack());
             if enemy.is_dead():
                 break
-
             # Now it is the enemy's turn
             self.hero.defend(enemy.attack());
-
         # Out of while loop, so something died
         if enemy.is_dead():
             print 'The hero is victorious!'
+            self.hero.loot(enemy);
         else:
             print 'The hero has suffered a fatal blow and has died!'
             print 'GAME OVER'

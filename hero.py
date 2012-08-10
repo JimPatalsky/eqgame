@@ -8,10 +8,22 @@ class Hero(character.Character):
         self.inv_limit = 10;
         self.loc = [0, 0]
 
+    def loot(self, enemy):
+        # Used to take inventory item from enemy after fight
+        if len(enemy.inventory) > 0:
+            if len(enemy.inventory) == 1:
+                # Will always be 1 for now
+                # Hopefully will change this later to add
+                # more rare drops or more variety
+                item_str = enemy.inventory[0]
+                print 'The', enemy.name, 'dropped:', item_str
+                self.receive_item(item_str)
+
     def receive_item(self, item_str):
-        if len(inventory) < self.inv_limit:
+        if len(self.inventory) < self.inv_limit:
             # Okay, can get the item
             self.inventory.append(item_str)
+            print 'You put the', item_str, 'into your bag!'
             return True
         else:
             # Too many items
